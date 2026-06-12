@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   DateTime? _dernierChargement;
   String    _prenom     = '';
 
+  // les deux variantes accent/sans accent sinon le filtre marchait pas selon le serveur
   static const Map<String, IconData> _iconeCategorie = {
     'plombier':      Icons.plumbing,
     'électricien':   Icons.electrical_services,
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         _api.getCategories(),
       ]);
 
+      // TODO: pagination quand la liste dépasse 50 prestataires
       final liste = resultats[0]
           .map((j) => Prestataire.fromJson(Map<String, dynamic>.from(j as Map)))
           .toList();

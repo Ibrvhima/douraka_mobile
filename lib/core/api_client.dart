@@ -18,6 +18,7 @@ class ApiClient {
     ),
   );
 
+  // TODO: gérer le refresh token un jour, pour l'instant on déconnecte direct
   ApiClient() {
     // Quand le JWT expire, Django renvoie 401. On efface le token localement
     // et on redirige vers /login en vidant toute la pile (pushNamedAndRemoveUntil)
@@ -162,8 +163,7 @@ class ApiClient {
     return rep.data;
   }
 
-  // ATTENTION : Django attend l'id entier (PrimaryKeyRelatedField) et non l'UUID.
-  // Le profil prestataire expose l'UUID mais la demande veut l'int pk.
+  // ATTENTION : Django attend l'id entier et pas l'UUID — j'ai perdu 1h là-dessus
   Future<void> envoyerDemande({
     required int    prestataireId,
     required String description,
@@ -311,7 +311,7 @@ class ApiClient {
     return rep.data;
   }
 
-  // L'appel GET marque aussi les messages comme lus côté Django —
+  // le GET marque aussi les messages comme lus côté Django, pratique —
   // pas besoin d'un deuxième appel "marquer lu" séparé.
   Future<List<dynamic>> getMessages(int convId) async {
     final rep = await _dio.get(

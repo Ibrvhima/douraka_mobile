@@ -33,7 +33,7 @@ class _DashboardPrestataireScreenState extends State<DashboardPrestataireScreen>
       if (!mounted) return;
       setState(() { _stats = stats; _chargement = false; });
     } catch (e) {
-      debugPrint('Erreur stats: $e');
+      debugPrint('Erreur stats: $e'); // TODO: message d'erreur plus précis
       if (!mounted) return;
       setState(() { _chargement = false; _erreur = true; });
     }

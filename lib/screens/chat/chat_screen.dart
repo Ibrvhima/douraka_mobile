@@ -46,6 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _initialiser();
   }
 
+  // j'avais essayé StreamBuilder mais la gestion du WS était trop galère
   Future<void> _initialiser() async {
     // Récupère l'ID connecté pour distinguer mes messages des autres
     try {
@@ -57,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (!mounted) return;
     _connecterWS();
 
-    // Polling toutes les 5 s en secours si le WS tombe
+    // polling de secours si le WS tombe — 5s c'est raisonnable
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 5),
       (_) => _chargerMessages(),

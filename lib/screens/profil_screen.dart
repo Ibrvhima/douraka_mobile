@@ -35,6 +35,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
   void _recharger() => setState(() { _futurProfil = _charger(); });
 
+  // void _modifierPhoto() async {
+  //   // TODO: déplacer la logique upload ici depuis AvatarWidget ?
+  // }
+
   Future<void> _seDeconnecter() async {
     final confirme = await showDialog<bool>(
       context: context,

@@ -97,7 +97,7 @@ class _AvatarWidgetState extends State<AvatarWidget> {
       final resultat = await widget.api.uploadPhoto(File(picked.path));
       debugPrint('Photo uploadée → ${resultat['photo']}');
 
-      // Vider le cache réseau Flutter pour que la nouvelle photo s'affiche immédiatement
+      // sans ça Flutter affiche l'ancienne photo même avec une URL différente... bizarre
       if (widget.photoUrl != null) {
         PaintingBinding.instance.imageCache.evict(
           NetworkImage(widget.photoUrl!),

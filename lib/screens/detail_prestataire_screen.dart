@@ -32,7 +32,7 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
 
   Future<Prestataire> _charger() async {
     final json = await _api.getPrestataire(widget.uuid);
-    // Map.from() convertit les nested Map<dynamic,dynamic> en Map<String,dynamic>
+    // sans Map.from ça crash sur les maps imbriquées, dart est chiant là-dessus
     return Prestataire.fromJson(Map<String, dynamic>.from(json));
   }
 

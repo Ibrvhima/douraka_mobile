@@ -6,9 +6,8 @@ class Demande {
   final int     id;
   final String  description;
   final String? titre;
-  // Statut brut (snake_case) — pour la logique métier
+  // statut sans accent côté Django — 'acceptee' et pas 'acceptée', vérifié dans les migrations
   final String  statut;
-  // Libellé lisible venant de get_statut_display() Django — pour l'affichage
   final String? statutDisplay;
   final String  createdAt;
 

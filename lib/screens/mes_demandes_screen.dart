@@ -33,6 +33,7 @@ class _MesDemandesScreenState extends State<MesDemandesScreen>
 
   List<Demande> _filtreParOnglet(String statut) {
     if (statut.isEmpty) return _demandes;
+    // 'en_cours' et 'acceptee' c'est le même état visuellement
     if (statut == 'acceptee') {
       return _demandes.where((d) => d.statut == 'acceptee' || d.statut == 'en_cours').toList();
     }
