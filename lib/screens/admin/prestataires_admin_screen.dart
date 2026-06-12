@@ -128,7 +128,6 @@ class _PrestatairesAdminScreenState extends State<PrestatairesAdminScreen>
   }
 }
 
-// ── Carte prestataire admin ───────────────────────────────────────────────
 class _CartePrestataireAdmin extends StatelessWidget {
   final Map<String, dynamic> data;
   final Future<void> Function(int pk, Map<String, dynamic> update) onUpdate;
@@ -155,7 +154,6 @@ class _CartePrestataireAdmin extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Infos prestataire
           Padding(
             padding: const EdgeInsets.all(14),
             child: Row(
@@ -204,28 +202,24 @@ class _CartePrestataireAdmin extends StatelessWidget {
 
           const Divider(height: 1, color: kBorder),
 
-          // Actions admin
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Wrap(
               spacing: 8,
               runSpacing: 6,
               children: [
-                // Approuver / Désapprouver
                 _BoutonAction(
                   label: approuve ? 'Désapprouver' : 'Approuver',
                   icone: approuve ? Icons.cancel_outlined : Icons.check_circle_outline,
                   couleur: approuve ? kRed : kGreen,
                   onTap: () => onUpdate(pk, {'approuve': !approuve}),
                 ),
-                // Certifier / Retirer certif
                 _BoutonAction(
                   label: verifie ? 'Retirer certif.' : 'Certifier',
                   icone: verifie ? Icons.remove_circle_outline_rounded : Icons.verified_rounded,
                   couleur: verifie ? kTextGray : kOrange,
                   onTap: () => onUpdate(pk, {'badge_verifie': !verifie}),
                 ),
-                // Disponibilité
                 _BoutonAction(
                   label: disponible ? 'Rendre indispo.' : 'Rendre dispo.',
                   icone: disponible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
