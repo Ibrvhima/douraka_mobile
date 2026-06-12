@@ -130,7 +130,6 @@ class _MesDemandesScreenState extends State<MesDemandesScreen>
 
 }
 
-// ── Liste filtrée par onglet ──────────────────────────────────────────────
 class _ListeDemandes extends StatelessWidget {
   final List<Demande> demandes;
   final bool          chargement;
@@ -200,7 +199,6 @@ class _ListeDemandes extends StatelessWidget {
   }
 }
 
-// ── Carte d'une demande client ────────────────────────────────────────────
 class _CarteDemande extends StatelessWidget {
   final Demande      demande;
   final ApiClient    api;
@@ -254,7 +252,6 @@ class _CarteDemande extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // En-tête : prestataire + statut
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
             child: Row(
@@ -282,7 +279,6 @@ class _CarteDemande extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Badge statut
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(color: _bgStatut, borderRadius: BorderRadius.circular(20)),
@@ -302,7 +298,6 @@ class _CarteDemande extends StatelessWidget {
 
           const Divider(height: 1, color: kBorder),
 
-          // Description + date
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
             child: Column(
@@ -337,13 +332,11 @@ class _CarteDemande extends StatelessWidget {
             ),
           ),
 
-          // ── Section Devis (si un devis existe) ──────────────────────────
           if (demande.hasDevis && demande.devis != null) ...[
             const Divider(height: 1, color: kBorder),
             _SectionDevis(demande: demande, api: api, onActionDone: onActionDone),
           ],
 
-          // ── Bouton messagerie ────────────────────────────────────────────
           if (demande.statut != 'annulee' && demande.statut != 'en_attente') ...[
             const Divider(height: 1, color: kBorder),
             Padding(
@@ -367,14 +360,12 @@ class _CarteDemande extends StatelessWidget {
             ),
           ],
 
-          // ── Actions client ───────────────────────────────────────────────
           if (demande.peutLaisserAvis || demande.peutAnnuler) ...[
             const Divider(height: 1, color: kBorder),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               child: Row(
                 children: [
-                  // Bouton Avis
                   if (demande.peutLaisserAvis)
                     Expanded(
                       child: OutlinedButton.icon(
@@ -391,7 +382,6 @@ class _CarteDemande extends StatelessWidget {
                     ),
                   if (demande.peutLaisserAvis && demande.peutAnnuler)
                     const SizedBox(width: 8),
-                  // Bouton Annuler
                   if (demande.peutAnnuler)
                     Expanded(
                       child: OutlinedButton.icon(
@@ -489,7 +479,6 @@ class _CarteDemande extends StatelessWidget {
   }
 }
 
-// ── Section devis dans la carte ───────────────────────────────────────────
 class _SectionDevis extends StatefulWidget {
   final Demande      demande;
   final ApiClient    api;
@@ -584,7 +573,6 @@ class _SectionDevisState extends State<_SectionDevis> {
                   style: const TextStyle(fontSize: 12, color: kTextGray)),
             ],
 
-            // Boutons accepter/refuser si devis en attente
             if (statut == 'en_attente') ...[
               const SizedBox(height: 10),
               Row(
@@ -627,7 +615,6 @@ class _SectionDevisState extends State<_SectionDevis> {
   }
 }
 
-// ── Formulaire d'avis ─────────────────────────────────────────────────────
 class _FormulaireAvis extends StatefulWidget {
   final ApiClient    api;
   final Demande      demande;
@@ -718,7 +705,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
               ),
             )
           else ...[
-            // Étoiles
             const Text('Note', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
             const SizedBox(height: 8),
             Row(

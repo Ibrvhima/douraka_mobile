@@ -36,7 +36,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
     return Prestataire.fromJson(Map<String, dynamic>.from(json));
   }
 
-  // Partage le profil du prestataire via le système natif (WhatsApp, SMS, etc.)
   void _partagerPrestataire(Prestataire p) {
     final categorie = p.categorie != null ? ' — ${p.categorie}' : '';
     final quartier  = p.quartier  != null ? ' à ${p.quartier}, Conakry' : '';
@@ -51,10 +50,8 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
     Share.share(message);
   }
 
-  // Lance un appel téléphonique vers le numéro du prestataire
-  // url_launcher ouvre l'application téléphone native du téléphone
   Future<void> _appeler(BuildContext ctx, String telephone) async {
-    // Nettoie le numéro : retire les espaces pour l'URI tel:
+    // on retire les espaces pour l'URI tel:
     final numero = telephone.replaceAll(' ', '');
     final uri    = Uri(scheme: 'tel', path: numero);
 
@@ -70,12 +67,10 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
     }
   }
 
-  // Ouvre le formulaire de demande dans une feuille du bas (bottom sheet)
-  // C'est le pattern natif mobile pour les formulaires contextuels
   void _ouvrirFormulaireDedemande(BuildContext ctx, Prestataire p) {
     showModalBottomSheet(
       context: ctx,
-      isScrollControlled: true, // permet de remplir l'écran si nécessaire
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _FormulaireDedemande(api: _api, prestataire: p),
     );
@@ -110,10 +105,8 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
 
           return Stack(
             children: [
-              // Contenu scrollable
               CustomScrollView(
                 slivers: [
-                  // ── En-tête avec dégradé orange ─────────────────────────
                   SliverAppBar(
                     expandedHeight: 200,
                     pinned: true,
@@ -124,7 +117,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                     actions: [
-                      // Bouton partager — envoie le lien du prestataire par WhatsApp, SMS…
                       IconButton(
                         icon: const Icon(Icons.share_rounded, color: Colors.white),
                         tooltip: 'Partager',
@@ -145,7 +137,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(height: 40),
-                            // Avatar
                             Container(
                               width: 72,
                               height: 72,
@@ -166,7 +157,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                                   : _initialesWidget(p.initiales),
                             ),
                             const SizedBox(height: 10),
-                            // Nom
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -198,17 +188,14 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                     ),
                   ),
 
-                  // ── Corps ────────────────────────────────────────────────
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ── Infos rapides ─────────────────────────────
                           Row(
                             children: [
-                              // Disponibilité
                               _InfoBadge(
                                 icon: Icons.circle,
                                 label: p.disponible
@@ -218,7 +205,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                                 bg: p.disponible ? kGreenLight : kRedLight,
                               ),
                               const SizedBox(width: 8),
-                              // Note
                               if (p.noteMoyenne != null)
                                 _InfoBadge(
                                   icon: Icons.star_rounded,
@@ -232,7 +218,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
 
                           const SizedBox(height: 16),
 
-                          // ── Carte infos de contact ─────────────────────
                           _Section(
                             titre: 'Informations',
                             child: Column(
@@ -258,7 +243,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
 
                           const SizedBox(height: 12),
 
-                          // ── Description ──────────────────────────────
                           if (p.description != null &&
                               p.description!.isNotEmpty)
                             _Section(
@@ -274,14 +258,13 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
 
                           const SizedBox(height: 12),
 
-                          // ── Section avis ──────────────────────────────
                           _SectionAvis(
                             prestataireId:   p.id,
                             prestataireUuid: widget.uuid,
                             nbAvis:          p.nbAvis,
                           ),
 
-                          // Espace pour que le bouton fixe ne cache pas le contenu
+                          // espace pour que le bouton fixe ne cache pas le contenu
                           const SizedBox(height: 80),
                         ],
                       ),
@@ -290,8 +273,7 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                 ],
               ),
 
-              // ── Boutons fixes en bas ─────────────────────────────────────
-              // Appeler + Envoyer une demande — safe area pour barre de gestes
+              // boutons fixes en bas — safe area pour barre de gestes Android
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -315,7 +297,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                   ),
                   child: Row(
                     children: [
-                      // Bouton Appeler — visible seulement si le prestataire a un numéro
                       if (p.telephone != null && p.telephone!.isNotEmpty) ...[
                         OutlinedButton.icon(
                           icon: const Icon(Icons.phone_rounded, size: 18, color: kGreen),
@@ -330,7 +311,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
                         ),
                         const SizedBox(width: 10),
                       ],
-                      // Bouton Demande — désactivé si prestataire indisponible
                       Expanded(
                         child: ElevatedButton.icon(
                           icon: const Icon(Icons.send_rounded, size: 18),
@@ -368,7 +348,6 @@ class _DetailPrestataireScreenState extends State<DetailPrestataireScreen> {
   }
 }
 
-// ── Badge d'info (disponibilité, note) ───────────────────────────────────
 class _InfoBadge extends StatelessWidget {
   final IconData icon;
   final String   label;
@@ -404,7 +383,6 @@ class _InfoBadge extends StatelessWidget {
   }
 }
 
-// ── Section avec titre et contenu ────────────────────────────────────────
 class _Section extends StatelessWidget {
   final String titre;
   final Widget child;
@@ -445,7 +423,6 @@ class _Section extends StatelessWidget {
   }
 }
 
-// ── Ligne d'info avec icône ───────────────────────────────────────────────
 class _LigneInfo extends StatelessWidget {
   final IconData icon;
   final String   texte;
@@ -470,7 +447,6 @@ class _LigneInfo extends StatelessWidget {
   }
 }
 
-// ── Bottom sheet : formulaire de demande enrichi ─────────────────────────
 // Le client peut préciser un titre, son adresse et marquer l'urgence.
 // Tous ces champs sont transmis à l'API Django qui les stocke.
 class _FormulaireDedemande extends StatefulWidget {
@@ -488,14 +464,13 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
   final _descriptionCtrl = TextEditingController();
   final _adresseCtrl     = TextEditingController();
 
-  bool   _urgence = false; // demande urgente → prestataire averti en priorité
+  bool   _urgence = false;
   bool   _envoi   = false;
   bool   _succes  = false;
   String _erreur  = '';
 
   @override
   void dispose() {
-    // Libérer les contrôleurs dès que le bottom sheet se ferme
     _titreCtrl.dispose();
     _descriptionCtrl.dispose();
     _adresseCtrl.dispose();
@@ -503,7 +478,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
   }
 
   Future<void> _envoyer() async {
-    // La description est le seul champ obligatoire
     if (_descriptionCtrl.text.trim().isEmpty) {
       setState(() => _erreur = 'Décris ce dont tu as besoin');
       return;
@@ -515,7 +489,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
       await widget.api.envoyerDemande(
         prestataireId: widget.prestataire.id,
         description:   _descriptionCtrl.text.trim(),
-        // Champs optionnels — on n'envoie que s'ils sont remplis
         titre:   _titreCtrl.text.trim().isEmpty   ? null : _titreCtrl.text.trim(),
         adresse: _adresseCtrl.text.trim().isEmpty ? null : _adresseCtrl.text.trim(),
         urgence: _urgence,
@@ -523,13 +496,12 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
 
       setState(() { _succes = true; _envoi = false; });
 
-      // Fermeture automatique 2s après le succès — l'utilisateur voit le ✓
+      // fermeture automatique 2s après le succès
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) Navigator.pop(context);
       });
 
     } on DioException catch (e) {
-      // On extrait le message d'erreur de la réponse Django si disponible
       String msg = 'Erreur lors de l\'envoi';
       if (e.response?.data is Map) {
         msg = (e.response!.data as Map).values.first?.toString() ?? msg;
@@ -547,8 +519,8 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      // SingleChildScrollView pour que le formulaire ne soit pas coupé
-      // quand le clavier est ouvert sur les petits écrans
+      // SingleChildScrollView pour éviter que le clavier coupe le formulaire
+      // sur les petits écrans
       child: SingleChildScrollView(
         padding: EdgeInsets.only(
           left: 20, right: 20, top: 20,
@@ -558,7 +530,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            // Poignée de glissement
             Center(
               child: Container(
                 width: 36, height: 4,
@@ -570,7 +541,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
             ),
             const SizedBox(height: 18),
 
-            // En-tête
             Row(
               children: [
                 Container(
@@ -597,7 +567,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
             ),
             const SizedBox(height: 20),
 
-            // ── Message de succès ────────────────────────────────────────
             if (_succes)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -616,10 +585,8 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
                 ),
               )
 
-            // ── Formulaire ───────────────────────────────────────────────
             else ...[
 
-              // Titre de la demande (optionnel mais aide le prestataire)
               const Text('Objet', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
               const SizedBox(height: 8),
               TextField(
@@ -633,7 +600,7 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
               ),
               const SizedBox(height: 14),
 
-              // Description détaillée — champ obligatoire
+              // champ obligatoire
               const Text('Description *', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
               const SizedBox(height: 4),
               const Text('Explique le problème en détail', style: TextStyle(fontSize: 12, color: kTextGray)),
@@ -649,7 +616,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
               ),
               const SizedBox(height: 14),
 
-              // Adresse (optionnelle — utile pour les déplacements)
               const Text('Adresse d\'intervention', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
               const SizedBox(height: 8),
               TextField(
@@ -664,7 +630,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
               ),
               const SizedBox(height: 16),
 
-              // Toggle urgence — fond rouge si activé
               GestureDetector(
                 onTap: () => setState(() => _urgence = !_urgence),
                 child: AnimatedContainer(
@@ -708,7 +673,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
                 ),
               ),
 
-              // Message d'erreur
               if (_erreur.isNotEmpty) ...[
                 const SizedBox(height: 10),
                 Container(
@@ -726,7 +690,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
 
               const SizedBox(height: 20),
 
-              // Bouton d'envoi
               ElevatedButton.icon(
                 onPressed: _envoi ? null : _envoyer,
                 icon: _envoi
@@ -744,7 +707,6 @@ class _FormulaireDedemendeState extends State<_FormulaireDedemande> {
   }
 }
 
-// ── Section avis du prestataire ───────────────────────────────────────────
 class _SectionAvis extends StatefulWidget {
   final int    prestataireId;
   final String prestataireUuid;
@@ -764,14 +726,14 @@ class _SectionAvisState extends State<_SectionAvis> {
   final _api             = ApiClient();
   List<Avis> _avis       = [];
   bool       _chargement = true;
-  bool       _tousAffiches = false;   // "Voir tous" expand
+  bool       _tousAffiches = false;
   Demande?   _demandeEligible;
 
   @override
   void initState() {
     super.initState();
     _charger();
-    _chargerDemandeEligible(); // cherche si le client peut laisser un avis
+    _chargerDemandeEligible();
   }
 
   Future<void> _charger() async {
@@ -788,8 +750,7 @@ class _SectionAvisState extends State<_SectionAvis> {
     }
   }
 
-  // Charge les demandes du client et cherche une demande terminée
-  // pour ce prestataire qui n'a pas encore d'avis
+  // cherche une demande terminée pour ce prestataire sans avis encore déposé
   Future<void> _chargerDemandeEligible() async {
     try {
       final donnees = await _api.getMesDemandes();
@@ -805,7 +766,7 @@ class _SectionAvisState extends State<_SectionAvis> {
             _demandeEligible = eligibles.isNotEmpty ? eligibles.first : null);
       }
     } catch (_) {
-      // Silencieux — pas de token (prestataire/admin) ou pas de demandes
+      // silencieux — pas de token (vue prestataire/admin) ou pas de demandes
     }
   }
 
@@ -819,7 +780,6 @@ class _SectionAvisState extends State<_SectionAvis> {
         api:       _api,
         demandeId: _demandeEligible!.id,
         onSuccess: () {
-          // Cache le bouton + rafraîchit la liste
           setState(() => _demandeEligible = null);
           _charger();
         },
@@ -841,7 +801,6 @@ class _SectionAvisState extends State<_SectionAvis> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Bannière "Laisser un avis" si demande éligible ─────────────
           if (_demandeEligible != null) ...[
             GestureDetector(
               onTap: _ouvrirFormulaireAvis,
@@ -885,7 +844,6 @@ class _SectionAvisState extends State<_SectionAvis> {
             ),
           ],
 
-          // ── Liste des avis ─────────────────────────────────────────────
           if (_avis.isEmpty)
             const Center(
               child: Padding(
@@ -911,7 +869,6 @@ class _SectionAvisState extends State<_SectionAvis> {
   }
 }
 
-// ── Carte d'un avis ───────────────────────────────────────────────────────
 class _CarteAvis extends StatelessWidget {
   final Avis avis;
 
@@ -924,7 +881,6 @@ class _CarteAvis extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar client
           Container(
             width: 34, height: 34,
             decoration: const BoxDecoration(color: kOrangeLight, shape: BoxShape.circle),
@@ -940,7 +896,6 @@ class _CarteAvis extends StatelessWidget {
                   children: [
                     Expanded(child: Text(avis.nomComplet,
                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary))),
-                    // Étoiles
                     Row(
                       children: List.generate(5, (i) => Icon(
                         i < avis.note ? Icons.star_rounded : Icons.star_outline_rounded,
@@ -969,7 +924,6 @@ class _CarteAvis extends StatelessWidget {
   }
 }
 
-// ── Bottom sheet : formulaire d'avis ──────────────────────────────────────
 class _FormulaireAvis extends StatefulWidget {
   final ApiClient api;
   final int       demandeId;
@@ -987,7 +941,7 @@ class _FormulaireAvis extends StatefulWidget {
 
 class _FormulaireAvisState extends State<_FormulaireAvis> {
   final _commentaireCtrl = TextEditingController();
-  int    _note      = 0;   // 0 = aucune étoile sélectionnée
+  int    _note      = 0;
   bool   _envoi     = false;
   String _erreur    = '';
 
@@ -1026,7 +980,7 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
       }
       if (mounted) setState(() { _erreur = msg; _envoi = false; });
     } finally {
-      // Remet _envoi à false uniquement si pas déjà fait par le catch
+      // remet _envoi à false uniquement si le catch ne l'a pas déjà fait
       if (mounted && _envoi) setState(() => _envoi = false);
     }
   }
@@ -1046,7 +1000,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Poignée de glissement
           Center(
             child: Container(
               width: 36, height: 4,
@@ -1064,7 +1017,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
               style: TextStyle(fontSize: 12, color: kTextGray)),
           const SizedBox(height: 20),
 
-          // ── Sélection des étoiles ────────────────────────────────────
           const Text('Note *',
               style: TextStyle(
                   fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
@@ -1101,7 +1053,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
 
           const SizedBox(height: 16),
 
-          // ── Commentaire ──────────────────────────────────────────────
           const Text('Commentaire',
               style: TextStyle(
                   fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
@@ -1115,7 +1066,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
             ),
           ),
 
-          // ── Message d'erreur ─────────────────────────────────────────
           if (_erreur.isNotEmpty) ...[
             const SizedBox(height: 10),
             Container(
@@ -1137,7 +1087,6 @@ class _FormulaireAvisState extends State<_FormulaireAvis> {
 
           const SizedBox(height: 20),
 
-          // ── Bouton Publier ───────────────────────────────────────────
           ElevatedButton(
             onPressed: _envoi ? null : _envoyer,
             child: _envoi

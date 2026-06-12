@@ -7,9 +7,6 @@ import '../../theme.dart';
 import '../../widgets/appbar_actions.dart';
 import '../chat/chat_screen.dart';
 
-// Écran PRESTATAIRE — liste des demandes reçues de clients
-// Actions : accepter, refuser, terminer, envoyer un devis
-
 class DemandesRecuesScreen extends StatefulWidget {
   const DemandesRecuesScreen({super.key});
 
@@ -27,7 +24,6 @@ class _DemandesRecuesScreenState extends State<DemandesRecuesScreen>
 
   late TabController _tabCtrl;
 
-  // Les 4 onglets — même structure que côté client pour la cohérence
   static const _onglets = [
     (label: 'Toutes',     statut: ''),
     (label: 'En attente', statut: 'en_attente'),
@@ -35,10 +31,9 @@ class _DemandesRecuesScreenState extends State<DemandesRecuesScreen>
     (label: 'Terminées',  statut: 'terminee'),
   ];
 
-  // Filtre les demandes selon l'onglet actif
   List<Demande> _filtreParOnglet(String statut) {
     if (statut.isEmpty) return _demandes;
-    // "En cours" regroupe les demandes acceptées et en cours de traitement
+    // "acceptee" et "en_cours" sont regroupés dans le même onglet
     if (statut == 'acceptee') {
       return _demandes.where((d) => d.statut == 'acceptee' || d.statut == 'en_cours').toList();
     }
@@ -106,7 +101,6 @@ class _DemandesRecuesScreenState extends State<DemandesRecuesScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(o.label),
-                  // Badge avec le nombre de demandes dans cet onglet
                   if (!_chargement && count > 0) ...[
                     const SizedBox(width: 5),
                     Container(
@@ -141,7 +135,6 @@ class _DemandesRecuesScreenState extends State<DemandesRecuesScreen>
 
 }
 
-// ── Liste filtrée par onglet — réutilisée pour chaque tab ─────────────────
 class _ListeDemandes extends StatelessWidget {
   final List<Demande> demandes;
   final bool          chargement;
@@ -222,7 +215,6 @@ class _ListeDemandes extends StatelessWidget {
   }
 }
 
-// ── Carte demande côté prestataire ────────────────────────────────────────
 class _CarteDemande extends StatelessWidget {
   final Demande      demande;
   final ApiClient    api;
@@ -263,7 +255,6 @@ class _CarteDemande extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // En-tête : client + statut
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
             child: Row(
@@ -301,7 +292,6 @@ class _CarteDemande extends StatelessWidget {
 
           const Divider(height: 1, color: kBorder),
 
-          // Contenu demande
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
             child: Column(
@@ -344,7 +334,6 @@ class _CarteDemande extends StatelessWidget {
             ),
           ),
 
-          // ── Bouton messagerie ────────────────────────────────────────────
           if (demande.statut != 'en_attente') ...[
             const Divider(height: 1, color: kBorder),
             Padding(
@@ -368,7 +357,6 @@ class _CarteDemande extends StatelessWidget {
             ),
           ],
 
-          // ── Actions prestataire ──────────────────────────────────────────
           if (demande.statut == 'en_attente') ...[
             const Divider(height: 1, color: kBorder),
             _ActionsEnAttente(demande: demande, api: api, onActionDone: onActionDone),
@@ -416,7 +404,6 @@ class _CarteDemande extends StatelessWidget {
   }
 }
 
-// ── Actions sur une demande en attente ────────────────────────────────────
 class _ActionsEnAttente extends StatefulWidget {
   final Demande      demande;
   final ApiClient    api;
@@ -456,7 +443,6 @@ class _ActionsEnAttenteState extends State<_ActionsEnAttente> {
       padding: const EdgeInsets.all(12),
       child: Column(
         children: [
-          // Boutons Accepter / Refuser
           Row(
             children: [
               Expanded(
@@ -493,7 +479,6 @@ class _ActionsEnAttenteState extends State<_ActionsEnAttente> {
             ],
           ),
           const SizedBox(height: 8),
-          // Bouton envoyer un devis
           if (!widget.demande.hasDevis)
             SizedBox(
               width: double.infinity,
@@ -533,7 +518,6 @@ class _ActionsEnAttenteState extends State<_ActionsEnAttente> {
   }
 }
 
-// ── Actions sur une demande acceptée/en cours ─────────────────────────────
 class _ActionsEnCours extends StatefulWidget {
   final Demande      demande;
   final ApiClient    api;
@@ -607,7 +591,6 @@ class _ActionsEnCoursState extends State<_ActionsEnCours> {
   }
 }
 
-// ── Formulaire de devis ───────────────────────────────────────────────────
 class _FormulaireDevis extends StatefulWidget {
   final ApiClient    api;
   final int          demandeId;
@@ -707,7 +690,6 @@ class _FormulaireDevisState extends State<_FormulaireDevis> {
               ),
             )
           else ...[
-            // Montant
             const Text('Montant (GNF) *',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
             const SizedBox(height: 8),
@@ -719,7 +701,6 @@ class _FormulaireDevisState extends State<_FormulaireDevis> {
             ),
             const SizedBox(height: 12),
 
-            // Description
             const Text('Description *',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
             const SizedBox(height: 8),
@@ -731,7 +712,6 @@ class _FormulaireDevisState extends State<_FormulaireDevis> {
             ),
             const SizedBox(height: 12),
 
-            // Délai
             const Text('Délai estimé',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
             const SizedBox(height: 8),

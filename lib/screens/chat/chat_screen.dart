@@ -40,8 +40,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Timer?            _pollingTimer;
   bool              _wsConnected = false;
 
-  // ── Cycle de vie ───────────────────────────────────────────────────────────
-
   @override
   void initState() {
     super.initState();
@@ -49,17 +47,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _initialiser() async {
-    // Récupère l'ID de l'utilisateur connecté pour distinguer mes messages
+    // Récupère l'ID connecté pour distinguer mes messages des autres
     try {
       final profil = await _api.getMonProfil();
       _monId = (profil['id'] as num?)?.toInt() ?? 0;
     } catch (_) {}
 
     await _chargerMessages(scrollToBottom: true);
-    if (!mounted) return;          // widget peut être disposé pendant les await ci-dessus
+    if (!mounted) return;
     _connecterWS();
 
-    // Polling toutes les 5 s (secours si le WS est coupé)
+    // Polling toutes les 5 s en secours si le WS tombe
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 5),
       (_) => _chargerMessages(),
@@ -75,8 +73,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  // ── Chargement des messages via REST ───────────────────────────────────────
-
   Future<void> _chargerMessages({bool scrollToBottom = false}) async {
     try {
       final donnees = await _api.getMessages(widget.convId);
@@ -87,7 +83,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .toList();
 
       setState(() {
-        // Fusionne en conservant les messages temporaires en cours d'envoi
+        // Conserve les messages temporaires (envoi en cours) pour éviter le flash
         final temps = _messages.where((m) => m.isTemp).toList();
         _messages = [...liste, ...temps];
         _chargement = false;
@@ -99,8 +95,6 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() => _chargement = false);
     }
   }
-
-  // ── WebSocket (réception temps réel) ───────────────────────────────────────
 
   Future<void> _connecterWS() async {
     try {
@@ -122,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
             if (parsed['type'] == 'message') {
               final msg = MessageChat.fromJson(
                   parsed['message'] as Map<String, dynamic>);
-              // N'ajoute que les messages des autres (les miens sont déjà en liste)
+              // N'ajoute que les messages des autres — les miens sont déjà dans la liste
               if (msg.expediteurId != _monId &&
                   !_messages.any((m) => m.id == msg.id)) {
                 setState(() => _messages.add(msg));
@@ -143,15 +137,13 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // ── Envoi d'un message ─────────────────────────────────────────────────────
-
   Future<void> _envoyer() async {
     final texte = _ctrl.text.trim();
     if (texte.isEmpty || _enviando) return;
 
     _ctrl.clear();
 
-    // Message temporaire affiché immédiatement (optimiste)
+    // Affichage optimiste : on ajoute le message localement avant la réponse API
     final tempId = -DateTime.now().millisecondsSinceEpoch;
     final tempMsg = MessageChat(
       id:               tempId,
@@ -195,8 +187,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // ── Scroll ─────────────────────────────────────────────────────────────────
-
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollCtrl.hasClients) {
@@ -208,8 +198,6 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
   }
-
-  // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +260,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          // ── Liste de messages ──────────────────────────────────────────────
           Expanded(
             child: _chargement
                 ? const Center(
@@ -319,7 +306,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
           ),
 
-          // ── Saisie du message ──────────────────────────────────────────────
           Container(
             color: Colors.white,
             padding: EdgeInsets.only(
@@ -329,7 +315,6 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // Champ de saisie
                 Expanded(
                   child: Container(
                     constraints: const BoxConstraints(maxHeight: 120),
@@ -355,7 +340,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 const SizedBox(width: 8),
 
-                // Bouton envoyer
                 GestureDetector(
                   onTap: _enviando ? null : _envoyer,
                   child: Container(
@@ -393,12 +377,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // Deux messages sont-ils du même jour ?
   bool _memJour(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 }
 
-// ── Bulle de message ──────────────────────────────────────────────────────────
 class _BulleMEssage extends StatelessWidget {
   final MessageChat msg;
   final bool        isMine;
@@ -479,7 +461,6 @@ class _BulleMEssage extends StatelessWidget {
   }
 }
 
-// ── Séparateur de date ────────────────────────────────────────────────────────
 class _SeparateurDate extends StatelessWidget {
   final DateTime date;
   const _SeparateurDate({required this.date});

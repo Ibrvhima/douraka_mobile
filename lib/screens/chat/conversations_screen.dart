@@ -6,9 +6,6 @@ import '../../theme.dart';
 import '../../widgets/appbar_actions.dart';
 import 'chat_screen.dart';
 
-// Liste des conversations de l'utilisateur connecté
-// Accessible depuis l'onglet "Messages" du shell client ou prestataire
-
 class ConversationsScreen extends StatefulWidget {
   const ConversationsScreen({super.key});
 
@@ -140,7 +137,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 
   Future<void> _ouvrirChat(Conversation conv) async {
-    // Détermine l'autre personne selon le rôle
+    // Selon le rôle, l'interlocuteur n'est pas le même
     final autre = _role == 'client' ? conv.prestataire : conv.client;
 
     await Navigator.push<void>(
@@ -153,12 +150,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         ),
       ),
     );
-    // Recharge après retour (marquer comme lus)
     if (mounted) _charger();
   }
 }
 
-// ── Carte d'une conversation ────────────────────────────────────────────────
 class _CarteConversation extends StatelessWidget {
   final Conversation conv;
   final String       role;
@@ -187,7 +182,6 @@ class _CarteConversation extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Avatar
             Container(
               width: 50, height: 50,
               decoration: BoxDecoration(
@@ -211,7 +205,6 @@ class _CarteConversation extends StatelessWidget {
             ),
             const SizedBox(width: 12),
 
-            // Contenu
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

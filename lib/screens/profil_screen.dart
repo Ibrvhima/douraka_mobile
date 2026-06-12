@@ -127,7 +127,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
               children: [
                 const SizedBox(height: 12),
 
-                // ── Avatar ───────────────────────────────────────────────────
                 AvatarWidget(
                   photoUrl:       user.photo,
                   initiales:      user.initiales,
@@ -137,14 +136,12 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
                 const SizedBox(height: 14),
 
-                // Nom + email
                 Text(user.nomComplet,
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: kTextPrimary)),
                 const SizedBox(height: 4),
                 Text(user.email, style: const TextStyle(fontSize: 13, color: kTextGray)),
                 const SizedBox(height: 8),
 
-                // Badge rôle
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(color: kOrangeLight, borderRadius: BorderRadius.circular(20)),
@@ -156,7 +153,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
                 const SizedBox(height: 28),
 
-                // ── Carte infos ──────────────────────────────────────────────
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -192,7 +188,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
                 const SizedBox(height: 16),
 
-                // ── Bouton modifier le profil ─────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
@@ -210,7 +205,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
                 const SizedBox(height: 10),
 
-                // ── Bouton déconnexion ───────────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
@@ -240,7 +234,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
 }
 
-// ── Ligne d'info dans la carte ────────────────────────────────────────────
 class _LigneInfo extends StatelessWidget {
   final IconData icon;
   final String   label;
@@ -279,7 +272,6 @@ class _LigneInfo extends StatelessWidget {
   }
 }
 
-// ── Formulaire d'édition du profil client ────────────────────────────────
 class _FormulaireEditionProfil extends StatefulWidget {
   final ApiClient    api;
   final Utilisateur  utilisateur;
@@ -364,7 +356,6 @@ class _FormulaireEditionProfilState extends State<_FormulaireEditionProfil> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Poignée de glissement
           Center(
             child: Container(
               width: 36, height: 4,
@@ -376,11 +367,11 @@ class _FormulaireEditionProfilState extends State<_FormulaireEditionProfil> {
           const Text('Modifier mon profil',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kTextPrimary)),
           const SizedBox(height: 4),
+          // L'email n'est pas modifiable — il sert d'identifiant de compte
           const Text('L\'email ne peut pas être modifié',
               style: TextStyle(fontSize: 12, color: kTextGray)),
           const SizedBox(height: 20),
 
-          // Nom et Prénom côte à côte
           Row(
             children: [
               Expanded(
@@ -421,7 +412,6 @@ class _FormulaireEditionProfilState extends State<_FormulaireEditionProfil> {
 
           const SizedBox(height: 14),
 
-          // Téléphone
           const Text('Téléphone', style: TextStyle(
               fontSize: 13, fontWeight: FontWeight.w600, color: kTextPrimary)),
           const SizedBox(height: 8),
@@ -436,7 +426,6 @@ class _FormulaireEditionProfilState extends State<_FormulaireEditionProfil> {
             ),
           ),
 
-          // Message d'erreur
           if (_erreur.isNotEmpty) ...[
             const SizedBox(height: 10),
             Container(
@@ -454,7 +443,6 @@ class _FormulaireEditionProfilState extends State<_FormulaireEditionProfil> {
 
           const SizedBox(height: 20),
 
-          // Bouton Sauvegarder
           ElevatedButton(
             onPressed: _sauvegarde ? null : _sauvegarder,
             child: _sauvegarde

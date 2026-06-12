@@ -4,11 +4,9 @@ import '../theme.dart';
 import '../screens/chat/conversations_screen.dart';
 import '../screens/notifications_screen.dart';
 
-// Widget réutilisable : icônes Messages + Notifications dans toutes les AppBars
-// showChat          : false sur l'écran ConversationsScreen (déjà dessus)
-// showNotification  : false sur l'écran NotificationsScreen (déjà dessus)
-// iconColor         : Colors.white pour les AppBars à fond orange
-
+// showChat/showNotification à false sur les écrans correspondants pour éviter
+// de naviguer vers la page sur laquelle on est déjà.
+// iconColor à Colors.white pour les AppBars à fond orange.
 class AppBarActions extends StatefulWidget {
   final bool  showChat;
   final bool  showNotification;
@@ -65,7 +63,6 @@ class _AppBarActionsState extends State<AppBarActions> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // ── Icône Messages ───────────────────────────────────────────────
         if (widget.showChat)
           IconButton(
             tooltip: 'Messages',
@@ -85,7 +82,6 @@ class _AppBarActionsState extends State<AppBarActions> {
             ),
           ),
 
-        // ── Icône Notifications ──────────────────────────────────────────
         if (widget.showNotification)
           IconButton(
             tooltip: 'Notifications',

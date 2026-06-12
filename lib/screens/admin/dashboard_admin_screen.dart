@@ -122,7 +122,6 @@ class _DashboardAdminScreenState extends State<DashboardAdminScreen> {
                         ),
                       )
                     else if (_stats != null) ...[
-                      // ── Utilisateurs ──────────────────────────────────────
                       _TitreSection(titre: '👥 Utilisateurs', badge: '${_stats!['users']?['total'] ?? 0}'),
                       const SizedBox(height: 8),
                       Row(
@@ -139,7 +138,6 @@ class _DashboardAdminScreenState extends State<DashboardAdminScreen> {
 
                       const SizedBox(height: 20),
 
-                      // ── Prestataires ──────────────────────────────────────
                       _TitreSection(titre: '🔧 Prestataires', badge: '${_stats!['prestataires']?['total'] ?? 0}'),
                       const SizedBox(height: 8),
                       Row(
@@ -156,7 +154,6 @@ class _DashboardAdminScreenState extends State<DashboardAdminScreen> {
 
                       const SizedBox(height: 20),
 
-                      // ── Demandes ──────────────────────────────────────────
                       _TitreSection(titre: '📋 Demandes', badge: '${_stats!['demandes']?['total'] ?? 0}'),
                       const SizedBox(height: 8),
                       GridView.count(

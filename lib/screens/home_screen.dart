@@ -27,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   DateTime? _dernierChargement;
   String    _prenom     = '';
 
-  // ── Icônes modernes par catégorie ─────────────────────────────────────────
   static const Map<String, IconData> _iconeCategorie = {
     'plombier':      Icons.plumbing,
     'électricien':   Icons.electrical_services,
@@ -89,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       });
 
       _filtrer();
-      _chargerProfil(); // salutation en arrière-plan
+      _chargerProfil();
 
     } catch (e) {
       debugPrint('Erreur chargement: $e');
@@ -150,7 +149,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
 
-            // ── AppBar ────────────────────────────────────────────────────
             SliverAppBar(
               pinned: true,
               backgroundColor: Colors.white,
@@ -174,7 +172,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               actions: const [AppBarActions()],
             ),
 
-            // ── Salutation personnalisée ──────────────────────────────────
             SliverToBoxAdapter(
               child: Container(
                 color: Colors.white,
@@ -197,7 +194,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
             ),
 
-            // ── Barre de recherche ────────────────────────────────────────
             SliverToBoxAdapter(
               child: Container(
                 color: Colors.white,
@@ -229,7 +225,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
             ),
 
-            // ── Filtres catégories avec icônes ────────────────────────────
             if (_categories.isNotEmpty)
               SliverToBoxAdapter(
                 child: SizedBox(
@@ -256,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ),
 
-            // ── Contenu ───────────────────────────────────────────────────
             if (_chargement)
               const SliverFillRemaining(
                 child: _SkeletonListe(),
@@ -294,7 +288,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 }
 
-// ── Chip de catégorie avec icône ──────────────────────────────────────────
 class _CategorieChip extends StatelessWidget {
   final String    label;
   final IconData  icone;
@@ -347,7 +340,6 @@ class _CategorieChip extends StatelessWidget {
   }
 }
 
-// ── Carte d'un prestataire ────────────────────────────────────────────────
 class _CartePrestataire extends StatelessWidget {
   final Prestataire prestataire;
   const _CartePrestataire({required this.prestataire});
@@ -426,7 +418,6 @@ class _CartePrestataire extends StatelessWidget {
 
             const SizedBox(width: 8),
 
-            // Avis + flèche (remplace le badge "Disponible" redondant)
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -463,7 +454,6 @@ class _CartePrestataire extends StatelessWidget {
   }
 }
 
-// ── Avatar ────────────────────────────────────────────────────────────────
 class _Avatar extends StatelessWidget {
   final String  initiales;
   final String? photo;
@@ -501,7 +491,6 @@ class _Initiales extends StatelessWidget {
   }
 }
 
-// ── Skeleton loading ──────────────────────────────────────────────────────
 class _SkeletonListe extends StatelessWidget {
   const _SkeletonListe();
 
@@ -581,7 +570,6 @@ class _SkeletonCarteState extends State<_SkeletonCarte> with SingleTickerProvide
   }
 }
 
-// ── État vide amélioré ────────────────────────────────────────────────────
 class _EtatVide extends StatelessWidget {
   final bool avecFiltre;
   const _EtatVide({this.avecFiltre = false});
@@ -618,7 +606,6 @@ class _EtatVide extends StatelessWidget {
   }
 }
 
-// ── État erreur ───────────────────────────────────────────────────────────
 class _EtatErreur extends StatelessWidget {
   final VoidCallback onRetry;
   const _EtatErreur({required this.onRetry});

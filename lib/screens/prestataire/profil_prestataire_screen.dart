@@ -9,9 +9,6 @@ import '../../widgets/appbar_actions.dart';
 import '../../widgets/avatar_widget.dart';
 import '../login_screen.dart';
 
-// Écran PRESTATAIRE — profil professionnel
-// Permet de modifier les infos, toggler la disponibilité, se déconnecter
-
 class ProfilPrestataireScreen extends StatefulWidget {
   const ProfilPrestataireScreen({super.key});
 
@@ -129,7 +126,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
               children: [
                 const SizedBox(height: 8),
 
-                // ── Avatar et nom ───────────────────────────────────────────
                 AvatarWidget(
                   photoUrl:       p.photo,
                   initiales:      p.initiales,
@@ -146,7 +142,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
 
                 const SizedBox(height: 16),
 
-                // ── Toggle disponibilité ─────────────────────────────────────
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -194,7 +189,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
 
                 const SizedBox(height: 14),
 
-                // ── Infos et statistiques ────────────────────────────────────
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -227,7 +221,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
 
                 const SizedBox(height: 14),
 
-                // ── Description ──────────────────────────────────────────────
                 if (p.description != null && p.description!.isNotEmpty)
                   Container(
                     width: double.infinity,
@@ -251,7 +244,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
 
                 const SizedBox(height: 14),
 
-                // ── Bouton modifier profil ───────────────────────────────────
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
@@ -304,7 +296,6 @@ class _ProfilPrestataireScreenState extends State<ProfilPrestataireScreen> {
   }
 }
 
-// ── Ligne d'info ──────────────────────────────────────────────────────────
 class _LigneInfo extends StatelessWidget {
   final IconData icon;
   final String   label;
@@ -341,7 +332,6 @@ class _LigneInfo extends StatelessWidget {
   }
 }
 
-// ── Formulaire d'édition du profil prestataire ────────────────────────────
 class _FormulaireEdition extends StatefulWidget {
   final ApiClient    api;
   final Prestataire  prestataire;

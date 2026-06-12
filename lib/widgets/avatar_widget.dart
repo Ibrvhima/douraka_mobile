@@ -4,10 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../core/api_client.dart';
 import '../theme.dart';
 
-// Widget avatar réutilisable — affiche la photo de profil ou les initiales,
-// avec un bouton caméra en bas-droite pour changer la photo.
-// Utilisé dans ProfilScreen (client) et ProfilPrestataireScreen (prestataire).
-
+// Utilisé dans ProfilScreen et ProfilPrestataireScreen.
 class AvatarWidget extends StatefulWidget {
   final String?      photoUrl;
   final String       initiales;
@@ -29,7 +26,6 @@ class AvatarWidget extends StatefulWidget {
 class _AvatarWidgetState extends State<AvatarWidget> {
   bool _uploading = false;
 
-  // Ouvre un bottom sheet pour choisir la source de l'image
   Future<void> _choisirPhoto() async {
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -43,7 +39,6 @@ class _AvatarWidgetState extends State<AvatarWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Poignée
               Container(
                 width: 36, height: 4,
                 decoration: BoxDecoration(
@@ -131,7 +126,6 @@ class _AvatarWidgetState extends State<AvatarWidget> {
       width: 96, height: 96,
       child: Stack(
         children: [
-          // ── Cercle avatar ────────────────────────────────────────────────
           Container(
             width: 96, height: 96,
             decoration: BoxDecoration(
@@ -178,7 +172,6 @@ class _AvatarWidgetState extends State<AvatarWidget> {
                     : _initiales(),
           ),
 
-          // ── Bouton caméra (overlay bas-droite) ────────────────────────
           Positioned(
             right: 0, bottom: 0,
             child: GestureDetector(
